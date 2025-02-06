@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management App</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .task-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #taskInput {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            margin-right: 10px;
+            transition: border 0.3s;
+        }
+
+        #taskInput:focus {
+            border-color: #4CAF50;
+        }
+
+        #addTaskBtn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #addTaskBtn:hover {
+            background-color: #45a049;
+        }
+
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-item {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .task-item button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .task-item button:hover {
+            background-color: #d32f2f;
+        }
+
+        .task-item button:disabled {
+            background-color: #c1c1c1;
+            cursor: not-allowed;
+        }
+
+        .task-item.completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="task-container">
+        <h1>Task Management App</h1>
+
+        <!-- Form to Add Task -->
+        <div class="task-input-container">
+            <input type="text" id="taskInput" placeholder="Enter new task" />
+            <button id="addTaskBtn">Add Task</button>
+        </div>
+
+        <!-- Task List -->
+        <ul id="taskList" class="task-list">
+        </ul>
+    </div>
+
+    <script>
+        // Get references to HTML elements
+        const taskInput = document.getElementById('taskInput');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const taskList = document.getElementById('taskList');
+
+        // Function to load tasks from Local Storage
+        function loadTasks() {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            tasks.forEach(taskText => {
+                const taskItem = document.createElement('li');
+                taskItem.classList.add('task-item');
+                taskItem.innerHTML = `
+                    <span>${taskText}</span>
+                    <div>
+                        <button onclick="deleteTask(this)">Delete</button>
+                        <button onclick="markComplete(this)">Complete</button>
+                    </div>
+                `;
+                taskList.appendChild(taskItem);
+            });
+        }
+
+        // Function to save tasks to Local Storage
+        function saveTasks() {
+            const tasks = [];
+            const taskItems = taskList.querySelectorAll('.task-item');
+            taskItems.forEach(item => {
+                tasks.push(item.querySelector('span').textContent.trim());
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        // Function to add task to the list
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText === "") return;
+
+            // Create a new task item
+            const taskItem = document.createElement('li');
+            taskItem.classList.add('task-item');
+            taskItem.innerHTML = `
+                <span>${taskText}</span>
+                <div>
+                    <button onclick="deleteTask(this)">Delete</button>
+                    <button onclick="markComplete(this)">Complete</button>
+                </div>
+            `;
+
+            // Append the new task item to the list
+            taskList.appendChild(taskItem);
+
+            // Save the task to Local Storage
+            saveTasks();
+
+            // Clear the input field after adding the task
+            taskInput.value = '';
+        }
+
+        // Function to delete task
+        function deleteTask(button) {
+            const taskItem = button.closest('.task-item');
+            taskList.removeChild(taskItem);
+            // Save the updated list to Local Storage
+            saveTasks();
+        }
+
+        // Function to mark task as completed
+        function markComplete(button) {
+            const taskItem = button.closest('.task-item');
+            taskItem.classList.add('completed');
+            button.disabled = true; // Disable complete button once marked
+            // Save the updated list to Local Storage
+            saveTasks();
+        }
+
+        // Add event listener for the Add Task button
+        addTaskBtn.addEventListener('click', addTask);
+
+        // Optional: Press 'Enter' to add a task
+        taskInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        // Load tasks when the page is loaded
+        loadTasks();
+    </script>
+</body>
+</html>

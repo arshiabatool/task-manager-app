@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            height: 100vh;
+            background-color: #121212; /* Black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+        }
+        .login-container {
+            background-color: #1e1e1e; /* Dark grey background for the form */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 16px;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #ff5733; /* Highlight on focus */
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff5733; /* Orange button */
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e04a2b; /* Darker orange on hover */
+        }
+        .footer {
+            margin-top: 20px;
+            color: #bbb;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #ff5733;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .name-tag {
+            color: #fff;
+            font-size: 20px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Login</h1>
+        
+        <!-- Form without action and method -->
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <button id="loginBtn">Log In</button>
+        
+        <div class="footer">
+            <p>Forgot password? <a href="#">Click here</a></p>
+        </div>
+    </div>
+
+    <div class="name-tag">
+        <p>Arshia Batool</p>
+    </div>
+
+    <script>
+        // Hardcoded username and password for testing
+        const validUsername = 'admin';
+        const validPassword = '123';
+
+        // Get references to HTML elements
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Function to handle login
+        function handleLogin() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (username === validUsername && password === validPassword) {
+                // If login is successful, redirect to task page
+                window.location.href = 'tasks.html'; // Redirect to task page
+            } else {
+                alert('Invalid username or password.');
+            }
+        }
+
+        // Add event listener to login button
+        loginBtn.addEventListener('click', handleLogin);
+    </script>
+
+</body>
+</html>
